@@ -47,18 +47,27 @@ The agent acts as a smart travel assistant that can:
 ## Project Structure
 
 ```
-TravelAgent/
-├── chat_agent.py                  # Main agent with MCP tool support
-├── mcp_servers/
-│   ├── api_gateway_server.py      # MCP server (currency, flights, airports)
-│   ├── airport_tool.py            # Airport search (Azure AI Search + fallback DB)
-│   └── create_airports_index.py   # Index builder for airport data
-├── api/
-│   └── main.py                    # FastAPI REST backend
-└── tools/
-    ├── search_tool.py             # Azure AI Search integration
-    ├── booking_tool.py            # Booking.com API (hotels, flights)
-    └── travel_tool.py             # Utility tools
+.
+├── .devcontainer/                 # Dev Container configuration
+├── src/
+│   └── TravelAgent/
+│       ├── chat_agent.py          # Main agent with MCP tool support
+│       ├── api/
+│       │   └── main.py            # FastAPI REST backend
+│       ├── mcp_servers/
+│       │   ├── api_gateway_server.py   # MCP server (currency, flights, airports)
+│       │   ├── airport_tool.py         # Airport search (Azure AI Search + fallback DB)
+│       │   └── create_airports_index.py
+│       └── tools/
+│           ├── search_tool.py     # Azure AI Search integration
+│           ├── booking_tool.py    # Booking.com API (hotels, flights)
+│           ├── timeseries_tool.py # Weather, hotel prices, flight prices
+│           └── travel_tool.py     # Utility tools
+├── tests/
+├── travelagent_v3.drawio          # Architecture diagram (draw.io)
+├── pyproject.toml                 # Dependencies & tool config
+├── Makefile
+└── README.md
 ```
 
 ---
