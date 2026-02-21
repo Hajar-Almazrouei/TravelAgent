@@ -7,8 +7,6 @@ import os
 from azure.identity import AzureCliCredential
 from azure.search.documents import SearchClient
 from typing import Optional
-
-
 @ai_function(
     name="search_travel_info",
     description="REQUIRED: Search the indexed travel database whenever user asks about destinations, places, or travel info. Use when user says 'search', 'find', 'database', 'tell me about [place]', or asks for destination information. Returns data from the travel-index with budget levels, climate info, and descriptions."
@@ -18,7 +16,7 @@ def search_travel_info(query: str, top_results: int = 5) -> str:
     Search Azure AI Search index for travel-related information.
     Returns relevant documents from the indexed travel database.
     """
-    print(f"\n🔍 [AI SEARCH] Calling search_travel_info with query: '{query}'")
+    print(f"\n [AI SEARCH] Calling search_travel_info with query: '{query}'")
     try:
 
         search_endpoint = os.environ.get("AZURE_SEARCH_ENDPOINT")
@@ -51,17 +49,17 @@ def search_travel_info(query: str, top_results: int = 5) -> str:
         
         result_count = 0
         for result in results:
-            result_count += 1
+            result_count += 
             title = result.get('title', result.get('name', 'Untitled'))
             content = result.get('content', result.get('description', ''))
             location = result.get('location', '')
             score = result.get('@search.score', 0)
             
             formatted_results.append(
-                f"\n Result {result_count} (Relevance: {score:.2f}):\n"
+                f"\n Result {result_count} (Relevance: {score:.f}):\n"
                 f"   Title: {title}\n"
                 f"   {f'Location: {location}' if location else ''}\n"
-                f"   {content[:200]}{'...' if len(content) > 200 else ''}\n"
+                f"   {content[:00]}{'...' if len(content) > 00 else ''}\n"
             )
         
         if result_count == 0:
@@ -71,8 +69,6 @@ def search_travel_info(query: str, top_results: int = 5) -> str:
         
     except Exception as e:
         return f"Error searching travel database: {str(e)}"
-
-
 @ai_function(
     name="search_destinations_by_criteria",
     description="REQUIRED: Search travel database by filters (climate, budget, season). Use when user asks about 'budget level', 'climate type', 'best season', or wants filtered results like 'expensive destinations', 'tropical places', 'spring travel'. Returns filtered results from travel-index."
@@ -95,7 +91,6 @@ def search_destinations_by_criteria(
         if not search_endpoint:
             return "Azure AI Search is not configured. Please add AZURE_SEARCH_ENDPOINT to .env file."
         
-        # Build filter query
         filters = []
         if climate:
             filters.append(f"climate eq '{climate}'")
@@ -106,10 +101,8 @@ def search_destinations_by_criteria(
         
         filter_str = " and ".join(filters) if filters else None
         
-        # Build search text from activities
         search_text = activities if activities else "*"
         
-        # Use AzureCliCredential (no keys!)
         credential = AzureCliCredential(process_timeout=60)
         search_client = SearchClient(
             endpoint=search_endpoint,
@@ -117,14 +110,12 @@ def search_destinations_by_criteria(
             credential=credential
         )
         
-        # Execute filtered search
         results = search_client.search(
             search_text=search_text,
             filter=filter_str,
             top=5
         )
         
-        # Format results
         criteria_text = []
         if climate: criteria_text.append(f"Climate: {climate}")
         if budget: criteria_text.append(f"Budget: {budget}")
@@ -138,13 +129,13 @@ def search_destinations_by_criteria(
         
         result_count = 0
         for result in results:
-            result_count += 1
+            result_count += 
             name = result.get('name', result.get('title', 'Unknown'))
             description = result.get('description', result.get('content', ''))
             
             formatted_results.append(
-                f"\n🌟 {result_count}. {name}\n"
-                f"   {description[:150]}{'...' if len(description) > 150 else ''}\n"
+                f"\n {result_count}. {name}\n"
+                f"   {description[:50]}{'...' if len(description) > 50 else ''}\n"
             )
         
         if result_count == 0:
