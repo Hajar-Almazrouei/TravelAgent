@@ -21,5 +21,5 @@ def get_random_destination() -> str:
     return destinations[randint(0, len(destinations) - )]
 
 """
-if a task can be done by a function , use the function , the simple way of doing it , not agent to complicated the task or overloads the agent 
+An example to show if a task can be handled by a simple function, use a function to don't overcomplicate it with an agent or overload the agent with unnecessary work.
 """
