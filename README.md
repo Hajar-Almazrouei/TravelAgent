@@ -1,8 +1,9 @@
-# AI Travel Agent —  Trip Planning with Real-Time Data
+# AI Travel Agent — Trip Planning with Real-Time Data
 
-An agent built on **Azure AI Agent Framework**, **Azure OpenAI (GPT-4)**, and **MCP**. It combines real-time hotel/flight pricing, semantic destination search, and weather forecasts into a single conversational interface.
+An agent built on **Azure AI Agent Framework**, **Azure OpenAI (GPT-4)**, and **MCP**.  
+It combines real-time hotel/flight pricing, semantic destination search, and weather forecasts into a single conversational interface.
 
-![Architecture Diagram](travelagent_v3.drawio)
+---
 
 ## What This Project Does
 
@@ -14,24 +15,47 @@ The agent acts as a smart travel assistant that can:
 - **Check weather forecasts** for any destination
 - **Convert currencies**, estimate flight times, search airports, and check visa requirements via MCP tools
 - **Maintain conversation context** across multi-turn dialogues using threads
+
 ---
 
 ## Architecture
 
-See the full architecture diagram: [travelagent_v3.drawio](travelagent_v3.drawio)
+> View the full interactive diagram: [`travelagent_v3.drawio`](travelagent_v3.drawio) (open with [draw.io](https://app.diagrams.net))
+
+```
+┌─────────────────────────────────────────────────────┐
+│                  User Interfaces                     │
+│         CLI Chat  ·  DevUI  ·  REST API              │
+└────────────────────────┬────────────────────────────┘
+                         │
+┌────────────────────────▼────────────────────────────┐
+│          Travel Agent  (Azure OpenAI GPT-4)          │
+│    Intent understanding · Tool orchestration         │
+│    Thread-based memory  · Response formatting        │
+└───┬──────────┬──────────┬──────────┬────────────────┘
+    │          │          │          │
+┌───▼───┐ ┌───▼───┐ ┌───▼────┐ ┌───▼──────────┐
+│Azure  │ │Booking│ │Weather │ │ MCP Server   │
+│AI     │ │.com   │ │(Open-  │ │  · Currency  │
+│Search │ │API    │ │ Meteo) │ │  · Airports  │
+│(600+) │ │       │ │        │ │  · Visa info │
+└───────┘ └───────┘ └────────┘ └──────────────┘
+```
+
 ---
 
 ## Project Structure
 
 ```
-TravelAgent/                       # Travel Agent with MCP integration
-├── chat_agent.py                  # Agent with MCP tool support
+TravelAgent/
+├── chat_agent.py                  # Main agent with MCP tool support
 ├── mcp_servers/
 │   ├── api_gateway_server.py      # MCP server (currency, flights, airports)
 │   ├── airport_tool.py            # Airport search (Azure AI Search + fallback DB)
 │   └── create_airports_index.py   # Index builder for airport data
-├── api/main.py                    # FastAPI REST backend
-└── tools/                         # Agent tool implementations
+├── api/
+│   └── main.py                    # FastAPI REST backend
+└── tools/
     ├── search_tool.py             # Azure AI Search integration
     ├── booking_tool.py            # Booking.com API (hotels, flights)
     └── travel_tool.py             # Utility tools
@@ -53,16 +77,15 @@ TravelAgent/                       # Travel Agent with MCP integration
 1. **Open in Dev Container** (recommended) — VS Code will detect `.devcontainer/` and offer to reopen:
 
    ```bash
-   # Or install dependencies manually:
    poetry install
    poetry shell
    ```
 
-2. **Configure environment variables:**
+2. **Configure environment variables** in a `.env` file at the project root:
 
    | Variable | Description |
    |----------|-------------|
-   | `PROJECT_CONNECTION_STRING` | Azure AI project connection string |
+   | `AZURE_AI_PROJECT_ENDPOINT` | Azure AI project endpoint |
    | `MODEL_DEPLOYMENT_NAME` | Azure OpenAI model deployment (e.g. `gpt-4`) |
    | `AZURE_AI_SEARCH_ENDPOINT` | Azure AI Search endpoint URL |
    | `RAPIDAPI_KEY` | RapidAPI key for Booking.com |
@@ -71,21 +94,17 @@ TravelAgent/                       # Travel Agent with MCP integration
 
    ```bash
    # CLI chat
-   python src/agents_playground/chat_agent.py
-
-   # DevUI (browser at http://127.0.0.1:8090)
-   python src/agents_playground/devui_travel_agent.py
+   python src/TravelAgent/chat_agent.py
 
    # REST API
-   uvicorn src.agents_playground.api.main:app --reload
+   uvicorn src.TravelAgent.api.main:app --reload
    ```
 
-### Development Workflow
+### Development
 
 ```bash
-pytest              # Run tests with coverage
+pytest              # Run tests
 ruff format .       # Format code
 ruff check .        # Lint
 mypy src/           # Type check
-make test           # Run all checks
 ```
