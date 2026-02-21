@@ -20,27 +20,9 @@ The agent acts as a smart travel assistant that can:
 
 ## Architecture
 
-> View the full interactive diagram: [`travelagent_v3.drawio`](travelagent_v3.drawio) (open with [draw.io](https://app.diagrams.net))
+![Travel Agent Architecture](diagrams/travelagent.png)
 
-```
-┌─────────────────────────────────────────────────────┐
-│                  User Interfaces                     │
-│         CLI Chat  ·  DevUI  ·  REST API              │
-└────────────────────────┬────────────────────────────┘
-                         │
-┌────────────────────────▼────────────────────────────┐
-│          Travel Agent  (Azure OpenAI GPT-4)          │
-│    Intent understanding · Tool orchestration         │
-│    Thread-based memory  · Response formatting        │
-└───┬──────────┬──────────┬──────────┬────────────────┘
-    │          │          │          │
-┌───▼───┐ ┌───▼───┐ ┌───▼────┐ ┌───▼──────────┐
-│Azure  │ │Booking│ │Weather │ │ MCP Server   │
-│AI     │ │.com   │ │(Open-  │ │  · Currency  │
-│Search │ │API    │ │ Meteo) │ │  · Airports  │
-│(600+) │ │       │ │        │ │  · Visa info │
-└───────┘ └───────┘ └────────┘ └──────────────┘
-```
+> Interactive version: [travelagent_v3.drawio](diagrams/travelagent_v3.drawio) (open with [draw.io](https://app.diagrams.net))
 
 ---
 
@@ -64,7 +46,9 @@ The agent acts as a smart travel assistant that can:
 │           ├── timeseries_tool.py # Weather, hotel prices, flight prices
 │           └── travel_tool.py     # Utility tools
 ├── tests/
-├── travelagent_v3.drawio          # Architecture diagram (draw.io)
+├── diagrams/
+│   ├── travelagent.png             # Architecture diagram (PNG)
+│   └── travelagent_v3.drawio       # Architecture diagram (draw.io, editable)
 ├── pyproject.toml                 # Dependencies & tool config
 ├── Makefile
 └── README.md
