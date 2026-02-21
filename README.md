@@ -24,6 +24,8 @@ The agent acts as a smart travel assistant that can:
 
 > Interactive version: [travelagent_v3.drawio](diagrams/travelagent_v3.drawio) (open with [draw.io](https://app.diagrams.net))
 
+For a detailed breakdown of every component, tool, and data flow, see [HOW_IT_WORKS.md](HOW_IT_WORKS.md).
+
 ---
 
 ## Project Structure
